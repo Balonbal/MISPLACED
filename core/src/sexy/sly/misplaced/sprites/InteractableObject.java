@@ -3,12 +3,12 @@ package sexy.sly.misplaced.sprites;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 
-public abstract class InteractibleObject {
+public abstract class InteractableObject {
 
     private Texture texture;
     private Vector3 position;
 
-    protected InteractibleObject(Texture texture, int x, int y) {
+    protected InteractableObject(Texture texture, int x, int y) {
         this.texture = texture;
         this.position = new Vector3(x, y, 0);
     }

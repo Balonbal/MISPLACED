@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import sexy.sly.misplaced.managers.GameStateManager;
@@ -23,6 +27,8 @@ public class PlayState extends State {
     private ShapeRenderer shapeRenderer;
     private Label actionLabel;
     private ParticleEffect effect;
+    private OrthogonalTiledMapRenderer tiledMapRenderer;
+    private TiledMap map;
 
     protected PlayState(GameStateManager manager) {
         super(manager);
@@ -41,6 +47,9 @@ public class PlayState extends State {
         shapeRenderer = new ShapeRenderer();
         effect = new ParticleEffect();
         effect.load(Gdx.files.internal("Fire"), Gdx.files.internal("data"));
+
+        map = new TmxMapLoader().load("tilemaps/beachmap.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
     }
 
     @Override
@@ -79,10 +88,16 @@ public class PlayState extends State {
         crashedPlane.update(deltaTime);
         effect.update(deltaTime);
         effect.start();
+
+        //Move camera
+        camera.position.set(player.getPosition());
+        camera.update();
     }
 
     @Override
     public void render(SpriteBatch batch) {
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(crashedPlane.getTexture(), crashedPlane.getPosition().x, crashedPlane.getPosition().y);

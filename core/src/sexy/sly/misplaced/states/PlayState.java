@@ -8,10 +8,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import sexy.sly.misplaced.managers.GameStateManager;
@@ -29,12 +34,13 @@ public class PlayState extends State {
     private ParticleEffect effect;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private TiledMap map;
+    private MapObjects collisions;
 
     protected PlayState(GameStateManager manager) {
         super(manager);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        player = new Player(50, 50);
+
         crashedPlane = new CrashedPlane(150, 150);
 
         font = new BitmapFont(Gdx.files.internal("rexliarg.fnt"));
@@ -50,6 +56,10 @@ public class PlayState extends State {
 
         map = new TmxMapLoader().load("tilemaps/beachmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
+
+        collisions = map.getLayers().get("Collision").getObjects();
+
+        player = new Player(50, 50, map);
     }
 
     @Override
@@ -75,16 +85,16 @@ public class PlayState extends State {
                 crashedPlane.onInteract();
             }
         }
-
-        if (crashedPlane.isColliding(player.getPosition())) {
-            //TODO move player away
-        }
     }
 
     @Override
     public void update(float deltaTime) {
         handleInput();
+
+        Vector3 oldpos = player.getPosition().cpy();
+
         player.update(deltaTime);
+
         crashedPlane.update(deltaTime);
         effect.update(deltaTime);
         effect.start();
@@ -97,13 +107,17 @@ public class PlayState extends State {
     @Override
     public void render(SpriteBatch batch) {
         tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
+        tiledMapRenderer.render(new int[] { 0 });
+
         batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
-        batch.draw(crashedPlane.getTexture(), crashedPlane.getPosition().x, crashedPlane.getPosition().y);
-        effect.setPosition(crashedPlane.getPosition().x + 20, crashedPlane.getPosition().y + 10);
-        effect.draw(batch);
+
         batch.draw(player.getTexture(), player.getPosition().x, player.getPosition().y);
+
+        //tiledMapRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("Foreground"));
+
+
         label.setPosition(crashedPlane.getPosition().x + (crashedPlane.getTexture().getWidth() / 2), crashedPlane.getPosition().y + crashedPlane.getTexture().getHeight() / 2);
         label.draw(batch, 1);
         if (crashedPlane.getProgress() > 0) {
@@ -114,6 +128,8 @@ public class PlayState extends State {
         batch.end();
         if (crashedPlane.getProgress() > 0) drawProgressBar(new Vector3(player.getPosition().x + player.getTexture().getWidth() / 2, player.getPosition().y + player.getTexture().getHeight() + 5, 0),
                 player.getTexture().getWidth()*2, 5, crashedPlane.getProgress());
+
+        tiledMapRenderer.render(new int[] { 1 });
     }
 
     @Override

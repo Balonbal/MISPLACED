@@ -10,6 +10,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import sexy.sly.misplaced.actions.Action;
+import sexy.sly.misplaced.actions.LootAction;
+import sexy.sly.misplaced.lib.Reference;
 
 public class Player extends Sprite {
     private Vector3 position;
@@ -17,6 +20,10 @@ public class Player extends Sprite {
     private Vector3 maxSpeed;
     private TiledMap map;
     private MapObjects collisions;
+    private MapObjects interactions;
+    public float progress = 0;
+    public String actionLabel;
+    public Action currentAction;
 
     public Texture getTexture() {
         return texture;
@@ -41,6 +48,7 @@ public class Player extends Sprite {
 
         this.map = map;
         collisions = map.getLayers().get("Collision").getObjects();
+        interactions = map.getLayers().get("Interaction").getObjects();
     }
 
     public void update(float dt) {
@@ -64,9 +72,25 @@ public class Player extends Sprite {
 
         position.add(velocity);
         velocity.scl(1/dt);
+        if (currentAction != null) currentAction.update(dt);
     }
 
     public Vector3 getMaxSpeed() {
         return maxSpeed;
+    }
+
+    public void interact() {
+        //Find interaction element
+        for (RectangleMapObject object: interactions.getByType(RectangleMapObject.class)) {
+            if (Intersector.overlaps(object.getRectangle(), new Rectangle(getPosition().x, getPosition().y, getWidth(), getHeight()))) {
+                //TODO Improve this
+                int action = Integer.parseInt(String.valueOf(object.getProperties().get("onInteract")));
+                int interactee = Integer.parseInt(String.valueOf(object.getProperties().get("object")));
+                switch (action) {
+                    case Reference.INTERACT_LOOT:
+                        currentAction = new LootAction(interactee);
+                }
+            }
+        }
     }
 }

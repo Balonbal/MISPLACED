@@ -13,6 +13,8 @@ import com.badlogic.gdx.math.Vector3;
 import sexy.sly.misplaced.actions.Action;
 import sexy.sly.misplaced.actions.LootAction;
 import sexy.sly.misplaced.lib.Reference;
+import sexy.sly.misplaced.resources.Inventory;
+import sexy.sly.misplaced.resources.Resource;
 
 public class Player extends Sprite {
     private Vector3 position;
@@ -21,6 +23,8 @@ public class Player extends Sprite {
     private TiledMap map;
     private MapObjects collisions;
     private MapObjects interactions;
+    private Inventory inventory;
+
     public float progress = 0;
     public String actionLabel;
     public Action currentAction;
@@ -49,6 +53,9 @@ public class Player extends Sprite {
         this.map = map;
         collisions = map.getLayers().get("Collision").getObjects();
         interactions = map.getLayers().get("Interaction").getObjects();
+
+        inventory = new Inventory();
+        inventory.addResource(new Resource("Scrap", true));
     }
 
     public void update(float dt) {
@@ -72,7 +79,12 @@ public class Player extends Sprite {
 
         position.add(velocity);
         velocity.scl(1/dt);
-        if (currentAction != null) currentAction.update(dt);
+        if (currentAction != null) {
+            currentAction.update(dt);
+            if (currentAction.isCompleted()) {
+                currentAction = null;
+            }
+        }
     }
 
     public Vector3 getMaxSpeed() {
@@ -88,9 +100,13 @@ public class Player extends Sprite {
                 int interactee = Integer.parseInt(String.valueOf(object.getProperties().get("object")));
                 switch (action) {
                     case Reference.INTERACT_LOOT:
-                        currentAction = new LootAction(interactee);
+                        currentAction = new LootAction(interactee, this);
                 }
             }
         }
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 }

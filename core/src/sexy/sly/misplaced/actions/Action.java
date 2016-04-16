@@ -5,6 +5,9 @@ public abstract class Action {
     float progress;
     String name;
     float maxTime;
+    boolean completed = false;
+
+    public boolean isCompleted() {return completed;}
 
     public float getProgress() {
         return progress/maxTime;

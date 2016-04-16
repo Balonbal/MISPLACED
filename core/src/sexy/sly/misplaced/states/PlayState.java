@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import sexy.sly.misplaced.UI.HUD;
 import sexy.sly.misplaced.managers.GameStateManager;
 import sexy.sly.misplaced.sprites.CrashedPlane;
 import sexy.sly.misplaced.sprites.Player;
@@ -27,6 +28,8 @@ public class PlayState extends State {
     private ParticleEffect effect;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private TiledMap map;
+    private HUD hud;
+    private float d;
 
     protected PlayState(GameStateManager manager) {
         super(manager);
@@ -50,6 +53,8 @@ public class PlayState extends State {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
 
         player = new Player(50, 50, map);
+
+        hud = new HUD(player);
     }
 
     @Override
@@ -87,6 +92,9 @@ public class PlayState extends State {
         //Move camera
         camera.position.set(player.getPosition());
         camera.update();
+
+        hud.update(deltaTime);
+        hud.act(deltaTime);
     }
 
     @Override
@@ -109,6 +117,9 @@ public class PlayState extends State {
             actionLabel.draw(batch, 1);
         }
         batch.end();
+
+        hud.render();
+
         //Render foreground on top
         tiledMapRenderer.render(new int[] { 1 });
 

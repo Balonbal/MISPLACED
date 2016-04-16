@@ -60,18 +60,24 @@ public class Player extends Sprite {
 
     public void update(float dt) {
         velocity.scl(dt);
+        float oldX = position.x;
+        float oldY = position.y;
 
         for (RectangleMapObject object: collisions.getByType(RectangleMapObject.class)) {
             if (velocity.x != 0) {
                 //Check if new x position overlaps
-                if (Intersector.overlaps(object.getRectangle(), new Rectangle(getPosition().x + velocity.x, getPosition().y, getWidth(), getHeight()))) {
+                if (Intersector.overlaps(object.getRectangle(), new Rectangle(getPosition().x + velocity.x, getPosition().y, getWidth(), getHeight())) ||
+                        Intersector.overlaps(object.getRectangle(), new Rectangle(oldX, oldY, velocity.x,  getHeight()))) {
                     velocity.x = 0; //Stop movement
+                    position.x = oldX;
                 }
             }
             if (velocity.y != 0) {
                 //Check if new y position overlaps
-                if (Intersector.overlaps(object.getRectangle(), new Rectangle(getPosition().x, getPosition().y + velocity.y, getWidth(), getHeight()))) {
+                if (Intersector.overlaps(object.getRectangle(), new Rectangle(getPosition().x, getPosition().y + velocity.y, getWidth(), getHeight())) ||
+                        Intersector.overlaps(object.getRectangle(), new Rectangle(oldX, oldY, getWidth(), velocity.y))) {
                     velocity.y = 0; //Stop movement
+                    position.y = oldY;
                 }
             }
         }

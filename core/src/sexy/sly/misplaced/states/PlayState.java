@@ -19,40 +19,19 @@ import sexy.sly.misplaced.sprites.Player;
 
 public class PlayState extends State {
     private Player player;
-    private CrashedPlane crashedPlane;
-    private BitmapFont font;
-    private Label.LabelStyle labelStyle;
-    private Label label;
-    private ShapeRenderer shapeRenderer;
-    private Label actionLabel;
-    private ParticleEffect effect;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private TiledMap map;
     private HUD hud;
-    private float d;
 
     protected PlayState(GameStateManager manager) {
         super(manager);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 
-        crashedPlane = new CrashedPlane(150, 150);
-
-        font = new BitmapFont(Gdx.files.internal("rexliarg.fnt"));
-        labelStyle = new Label.LabelStyle(font, Color.LIGHT_GRAY);
-        label = new Label("Wreckage", labelStyle);
-        actionLabel = new Label("", labelStyle);
-        actionLabel.setFontScale(.5f);
-        label.setFontScale(.75f);
-
-        shapeRenderer = new ShapeRenderer();
-        effect = new ParticleEffect();
-        effect.load(Gdx.files.internal("Fire"), Gdx.files.internal("data"));
-
         map = new TmxMapLoader().load("tilemaps/beachmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        player = new Player(50, 50, map);
+        player = new Player(360, 200, map);
 
         hud = new HUD(player);
     }
@@ -85,12 +64,9 @@ public class PlayState extends State {
 
         player.update(deltaTime);
 
-        crashedPlane.update(deltaTime);
-        effect.update(deltaTime);
-        effect.start();
-
         //Move camera
         camera.position.set(player.getPosition());
+        camera.position.add(player.getWidth() / 2, player.getHeight() / 2, 0);
         camera.update();
 
         hud.update(deltaTime);
@@ -108,47 +84,17 @@ public class PlayState extends State {
 
         batch.draw(player.getTexture(), player.getPosition().x, player.getPosition().y);
 
-
-        label.setPosition(crashedPlane.getPosition().x + (crashedPlane.getTexture().getWidth() / 2), crashedPlane.getPosition().y + crashedPlane.getTexture().getHeight() / 2);
-        label.draw(batch, 1);
-        if (player.currentAction != null) {
-            actionLabel.setText(player.currentAction.getText());
-            actionLabel.setPosition(player.getPosition().x - 10, player.getPosition().y + player.getTexture().getHeight() + 15);
-            actionLabel.draw(batch, 1);
-        }
         batch.end();
-
-        hud.render();
 
         //Render foreground on top
         tiledMapRenderer.render(new int[] { 1 });
 
-        //Render HUD topmost
-        if (player.currentAction != null) drawProgressBar(new Vector3(player.getPosition().x + player.getTexture().getWidth() / 2, player.getPosition().y + player.getTexture().getHeight() + 5, 0),
-                player.getTexture().getWidth()*2, 5, player.currentAction.getProgress());
-
+        hud.render();
 
     }
 
     @Override
     public void dispose() {
 
-    }
-
-    public void drawProgressBar(Vector3 position, int width, int height, float progress) {
-        float startX = position.x - width/2;
-        float startY = position.y - height/2;
-        float border = 1;
-        float padding = 1;
-
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(startX - border, startY - border, width + border*2, height + border*2); //Draw border
-        shapeRenderer.setColor(Color.GRAY);
-        shapeRenderer.rect(startX, startY, width, height); //Draw background
-        shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect(startX + padding, startY + padding, (width - padding * 2) * progress, height - padding*2); //Draw progress
-        shapeRenderer.end();
     }
 }

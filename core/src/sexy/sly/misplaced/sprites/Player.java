@@ -25,8 +25,6 @@ public class Player extends Sprite {
     private MapObjects interactions;
     private Inventory inventory;
 
-    public float progress = 0;
-    public String actionLabel;
     public Action currentAction;
 
     public Texture getTexture() {

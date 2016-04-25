@@ -19,11 +19,6 @@ import sexy.sly.misplaced.story.Story;
 public class Misplaced extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private GameStateManager stateManager;
-	BitmapFont font;
-	Story story;
-	Texture crate;
-	Stage stage;
-	Skin skin;
 	
 	@Override
 	public void create () {

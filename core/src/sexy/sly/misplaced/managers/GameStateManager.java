@@ -1,16 +1,20 @@
 package sexy.sly.misplaced.managers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import sexy.sly.misplaced.states.State;
+import sexy.sly.misplaced.story.StoryParser;
 
 import java.util.Stack;
 
 public class GameStateManager {
 
     private Stack<State> states;
+    private StoryParser parser;
 
     public GameStateManager() {
         states = new Stack<State>();
+        parser = new StoryParser(Gdx.files.internal("data/Dialog.xml"));
     }
 
     public void push(State state) {
@@ -32,5 +36,9 @@ public class GameStateManager {
 
     public void render(SpriteBatch batch) {
         states.peek().render(batch);
+    }
+
+    public StoryParser getParser() {
+        return parser;
     }
 }

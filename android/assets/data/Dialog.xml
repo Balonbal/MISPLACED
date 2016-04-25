@@ -1,0 +1,29 @@
+<event id="0" name="introduction">
+    <dialogue id="0">
+        <text speaker="0">Oww! My head hurts!</text>
+        <text speaker="1">That's not so strange, considering..</text>
+        <text speaker="0">What?! Who's there?!</text>
+        <action type="rename" target="1" param="Inner voice"/>
+        <text speaker="0">Oh, that’s just brilliant, another one of those know-it-all-but-won’t-tell-me-anything.</text>
+        <text speaker="0">What’s next, huh? Let me guess.. You forgot my name and now I have to tell it to you?</text>
+        <action type="rename" target="1" param="Know-it-all"/>
+        <text speaker="1">Well, you know, you don't <bold>HAVE</bold> to.. I could just continue using 'you'</text>
+        <text speaker="0">Oh shut up, smartypants!</text>
+        <text speaker="1">...</text>
+        <text speaker="0">Sooooooo, you said you knew something about my head hurting?</text>
+        <text speaker="1">...</text>
+        <text speaker="0">Mr. Almighty-but-still-don’t-know-my-name?</text>
+        <action type="rename" target="1" param="Mr. Almighty"/>
+        <text speaker="1">Yes, yes, I’m here!</text>
+        <text speaker="1">Well, let’s start off with what you remember yourself, huh?</text>
+        <text speaker="0">Hmmm.. It’s all a haze.. I vaguely remember something about a plane, maybe?</text>
+        <text speaker="1">Would that be that plane over there?</text>
+        <text speaker="1">You could go take a look, maybe it will bring back hidden memories?</text>
+        <text speaker="0">Hey, don't try to distract me, I know you know more about me!</text>
+        <text speaker="0">...</text>
+        <text speaker="0">...</text>
+        <text speaker="0">Oh that's just fantastic, <bold>OF COURSE</bold> it disappears after saying something like that!</text>
+        <text speaker="0">Well, I guess it couldn’t hurt if I went and checked out the plane?</text>
+        <text speaker="0">And why am I talking to myself?</text>
+    </dialogue>
+</event>

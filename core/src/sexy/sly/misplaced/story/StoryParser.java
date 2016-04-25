@@ -7,6 +7,7 @@ import sexy.sly.misplaced.UI.InteractionHelper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class StoryParser {
 
@@ -24,12 +25,20 @@ public class StoryParser {
             XmlReader.Element action = dialogue.getChild(i);
             //Message
             if (action.getName().equals("text")) {
-                helper.showDialogue(action.getAttribute("Speaker"), action.getText());
+                helper.showDialogue(action.getAttribute("speaker"), action.getText());
             } else if (action.getName().equals("action")) {
                 //Do something
                 if (action.getAttribute("type").equals("rename")) {
                     helper.rename(Integer.parseInt(action.getAttribute("target")), action.getAttribute("param"));
                 }
+            } else if (action.getName().equals("choice")) {
+                Array<XmlReader.Element> options = action.getChildrenByName("option");
+                String[] choices = new String[options.size];
+                for (int j = 0; j < choices.length; j++) {
+                    choices[j] = options.get(j).getText();
+                }
+
+                helper.showChoice(action.getAttribute("text"), choices);
             }
         }
     }

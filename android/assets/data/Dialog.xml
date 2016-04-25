@@ -25,5 +25,9 @@
         <text speaker="0">Oh that's just fantastic, <bold>OF COURSE</bold> it disappears after saying something like that!</text>
         <text speaker="0">Well, I guess it couldn’t hurt if I went and checked out the plane?</text>
         <text speaker="0">And why am I talking to myself?</text>
+        <choice id="0" text="Choice test, please pick one">
+            <option action="test">Test</option>
+            <option action="test2">Test 2</option>
+        </choice>
     </dialogue>
 </event>

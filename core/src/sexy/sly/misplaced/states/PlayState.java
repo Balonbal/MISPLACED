@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import sexy.sly.misplaced.UI.HUD;
+import sexy.sly.misplaced.UI.InteractionTest;
 import sexy.sly.misplaced.managers.GameStateManager;
 import sexy.sly.misplaced.sprites.CrashedPlane;
 import sexy.sly.misplaced.sprites.Player;
@@ -26,6 +27,7 @@ public class PlayState extends State {
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private TiledMap map;
     private HUD hud;
+    InteractionTest test;
 
     protected PlayState(GameStateManager manager) {
         super(manager);
@@ -38,6 +40,7 @@ public class PlayState extends State {
         player = new Player(360, 200, map);
 
         hud = new HUD(player);
+        test = new InteractionTest();
     }
 
     @Override
@@ -57,8 +60,15 @@ public class PlayState extends State {
         player.getVelocity().set(vel);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            //Player is nearby
             player.interact();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            manager.getParser().showDialogue(0, hud.getDialogPanel());
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+            hud.getDialogPanel().showDialogue();
         }
     }
 

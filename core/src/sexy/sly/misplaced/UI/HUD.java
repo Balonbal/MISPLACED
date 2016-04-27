@@ -26,6 +26,7 @@ public class HUD extends Stage {
     private Skin skin;
     private Player player;
     private ActionPanel actionPanel;
+    private DialogPanel dialogPanel;
 
     private HashMap<String, Label> amounts;
 
@@ -51,9 +52,11 @@ public class HUD extends Stage {
         }
 
         actionPanel = new ActionPanel(skin);
+        dialogPanel = new DialogPanel(skin);
 
         this.addActor(actionPanel.getTable());
         this.addActor(inventory);
+        this.addActor(dialogPanel.getTable());
     }
 
     public void update(float delta) {
@@ -82,5 +85,9 @@ public class HUD extends Stage {
 
         return new NinePatch( new TextureRegion(t, 1, 1 , t.getWidth() - 2, t.getHeight() - 2), 4, 4, 4, 4);
 
+    }
+
+    public DialogPanel getDialogPanel() {
+        return dialogPanel;
     }
 }

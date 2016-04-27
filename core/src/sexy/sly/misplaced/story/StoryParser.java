@@ -25,7 +25,7 @@ public class StoryParser {
             XmlReader.Element action = dialogue.getChild(i);
             //Message
             if (action.getName().equals("text")) {
-                helper.showDialogue(action.getAttribute("speaker"), action.getText());
+                helper.push(new TextDialog(action.getAttribute("speaker"), action.getText()));
             } else if (action.getName().equals("action")) {
                 //Do something
                 if (action.getAttribute("type").equals("rename")) {

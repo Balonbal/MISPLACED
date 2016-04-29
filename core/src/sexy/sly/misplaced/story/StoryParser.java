@@ -28,9 +28,7 @@ public class StoryParser {
                 helper.push(new TextDialog(action.getAttribute("speaker"), action.getText()));
             } else if (action.getName().equals("action")) {
                 //Do something
-                if (action.getAttribute("type").equals("rename")) {
-                    helper.rename(Integer.parseInt(action.getAttribute("target")), action.getAttribute("param"));
-                }
+                helper.push(new ActionElement(action.getAttribute("type"), action.getAttribute("target"), action.getAttribute("param")));
             } else if (action.getName().equals("choice")) {
                 Array<XmlReader.Element> options = action.getChildrenByName("option");
                 String[] choices = new String[options.size];

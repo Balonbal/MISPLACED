@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import sexy.sly.misplaced.actions.ActionPerformer;
 import sexy.sly.misplaced.managers.CharacterManager;
+import sexy.sly.misplaced.story.ActionElement;
 import sexy.sly.misplaced.story.DialogElement;
 import sexy.sly.misplaced.story.TextDialog;
 
@@ -19,6 +21,7 @@ public class DialogPanel implements InteractionHelper {
     private Table table;
     private Label title, text;
     private CharacterManager characterManager;
+    private ActionPerformer performer;
 
     public DialogPanel(Skin skin, CharacterManager manager) {
         queue = new ArrayList<DialogElement>();
@@ -38,10 +41,11 @@ public class DialogPanel implements InteractionHelper {
         text = new Label("", skin);
         text.setWrap(true);
         table.add(title).right().row();
-        table.add(text).width(300f).expandY();
+        table.add(text).width(340f).expandY();
         table.setVisible(false);
 
         characterManager = manager;
+        performer = new ActionPerformer(manager);
     }
 
     @Override
@@ -65,8 +69,13 @@ public class DialogPanel implements InteractionHelper {
             DialogElement element = queue.get(0);
             if (element.hasDialog()) {
                 if (element instanceof TextDialog) { displayText(characterManager.getCharacter(Integer.parseInt(element.getTitle())).getName(), element.getText());}
+            } else if (element instanceof ActionElement) {
+                System.out.println("DOING THINGS");
+                performer.parseAction((ActionElement) element);
+                queue.remove(0);
+                showDialogue();
+                return;
             }
-
             queue.remove(0);
         } else {
             table.setVisible(false);
@@ -81,6 +90,7 @@ public class DialogPanel implements InteractionHelper {
     @Override
     public void push(DialogElement element) {
         queue.add(element);
+        System.out.println("Added new " + (element instanceof ActionElement ? "Action" : "Text") + "element to queue, new size is " + queue.size());
     }
 
     public Table getTable() {

@@ -2,6 +2,7 @@ package sexy.sly.misplaced.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import sexy.sly.misplaced.lib.Reference;
 import sexy.sly.misplaced.states.State;
 import sexy.sly.misplaced.story.Character;
 import sexy.sly.misplaced.story.StoryParser;
@@ -20,8 +21,8 @@ public class GameStateManager {
         characterManager = new CharacterManager();
 
         //Populate with characters
-        characterManager.push(new Character(0, "Player"));
-        characterManager.push(new Character(1, "????"));
+        characterManager.push(new Character(Reference.CHARACTER_PLAYER, "Player"));
+        characterManager.push(new Character(Reference.CHARACTER_NARRATOR, "????"));
     }
 
     public void push(State state) {

@@ -3,7 +3,6 @@
         <text speaker="0">Oww! My head hurts!</text>
         <text speaker="1">That's not so strange, considering..</text>
         <text speaker="0">What?! Who's there?!</text>
-        <action type="rename" target="1" param="Inner voice"/>
         <text speaker="0">Oh, that’s just brilliant, another one of those know-it-all-but-won’t-tell-me-anything.</text>
         <text speaker="0">What’s next, huh? Let me guess.. You forgot my name and now I have to tell it to you?</text>
         <action type="rename" target="1" param="Know-it-all"/>

@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import sexy.sly.misplaced.managers.CharacterManager;
 import sexy.sly.misplaced.resources.Resource;
 import sexy.sly.misplaced.sprites.Player;
 
@@ -30,7 +31,7 @@ public class HUD extends Stage {
 
     private HashMap<String, Label> amounts;
 
-    public HUD(Player player) {
+    public HUD(Player player, CharacterManager manager) {
         super();
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
@@ -52,7 +53,7 @@ public class HUD extends Stage {
         }
 
         actionPanel = new ActionPanel(skin);
-        dialogPanel = new DialogPanel(skin);
+        dialogPanel = new DialogPanel(skin, manager);
 
         this.addActor(actionPanel.getTable());
         this.addActor(inventory);

@@ -2,24 +2,13 @@ package sexy.sly.misplaced.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import sexy.sly.misplaced.UI.HUD;
-import sexy.sly.misplaced.UI.InteractionTest;
 import sexy.sly.misplaced.managers.GameStateManager;
-import sexy.sly.misplaced.sprites.CrashedPlane;
 import sexy.sly.misplaced.sprites.Player;
 
 public class PlayState extends State {
@@ -27,7 +16,6 @@ public class PlayState extends State {
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private TiledMap map;
     private HUD hud;
-    InteractionTest test;
 
     protected PlayState(GameStateManager manager) {
         super(manager);
@@ -39,8 +27,7 @@ public class PlayState extends State {
 
         player = new Player(360, 200, map);
 
-        hud = new HUD(player);
-        test = new InteractionTest();
+        hud = new HUD(player, manager.getCharacterManager());
     }
 
     @Override

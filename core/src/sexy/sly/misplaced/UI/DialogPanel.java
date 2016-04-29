@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import sexy.sly.misplaced.managers.CharacterManager;
 import sexy.sly.misplaced.story.DialogElement;
+import sexy.sly.misplaced.story.TextDialog;
 
 import java.util.ArrayList;
 
@@ -16,8 +18,9 @@ public class DialogPanel implements InteractionHelper {
     private ArrayList<DialogElement> queue;
     private Table table;
     private Label title, text;
+    private CharacterManager characterManager;
 
-    public DialogPanel(Skin skin) {
+    public DialogPanel(Skin skin, CharacterManager manager) {
         queue = new ArrayList<DialogElement>();
         table = new Table(skin).center().bottom();
 
@@ -37,6 +40,8 @@ public class DialogPanel implements InteractionHelper {
         table.add(title).right().row();
         table.add(text).width(300f).expandY();
         table.setVisible(false);
+
+        characterManager = manager;
     }
 
     @Override
@@ -59,7 +64,7 @@ public class DialogPanel implements InteractionHelper {
             if (!table.isVisible())table.setVisible(true);
             DialogElement element = queue.get(0);
             if (element.hasDialog()) {
-                displayText(element.getTitle().equalsIgnoreCase("1") ? "narrator" : "player", element.getText());
+                if (element instanceof TextDialog) { displayText(characterManager.getCharacter(Integer.parseInt(element.getTitle())).getName(), element.getText());}
             }
 
             queue.remove(0);
@@ -76,7 +81,6 @@ public class DialogPanel implements InteractionHelper {
     @Override
     public void push(DialogElement element) {
         queue.add(element);
-        System.out.println("Element added to queue: " + queue.size());
     }
 
     public Table getTable() {
